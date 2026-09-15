@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NutriTrack — AI-Powered Nutrition Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sage: {50:'#f3f8f2',100:'#e5f0e3',500:'#5b8c5a',600:'#477548',700:'#365d38'},
+            coral: {500:'#ef7d68',600:'#df6854'}
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+  <header class="bg-sage-700 text-white">
+    <div class="max-w-6xl mx-auto px-5 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <p class="text-sm font-medium text-sage-100">AI-POWERED NUTRITION TRACKER</p>
+        <h1 class="text-2xl font-bold">NutriTrack</h1>
+      </div>
+      <nav aria-label="Main navigation" class="flex flex-wrap gap-4 text-sm">
+        <a href="#dashboard" class="hover:text-sage-100">Dashboard</a>
+        <a href="#log" class="hover:text-sage-100">Food Log</a>
+        <a href="#goals" class="hover:text-sage-100">Goals</a>
+        <a href="#insights" class="hover:text-sage-100">Insights</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-5 py-8 space-y-8">
+    <section id="dashboard" class="grid lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2 bg-white rounded-3xl p-7 shadow-sm border border-slate-100">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <p class="text-sage-600 font-semibold">Tuesday, September 15</p>
+            <h2 class="text-3xl font-bold mt-1">Today's nutrition</h2>
+            <p class="text-slate-500 mt-2">Keep your meals balanced and stay close to your daily targets.</p>
+          </div>
+          <div class="bg-sage-50 rounded-2xl p-4 text-center">
+            <span class="text-3xl font-bold text-sage-700" id="score">82</span>
+            <p class="text-xs text-slate-500">Daily score</p>
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-3 gap-4 mt-7">
+          <div class="rounded-2xl bg-orange-50 p-5">
+            <p class="text-sm text-slate-500">Calories</p>
+            <p class="text-2xl font-bold mt-1"><span id="calories">1240</span> <span class="text-sm font-normal">/ 2000 kcal</span></p>
+            <div class="h-2 bg-orange-100 rounded-full mt-3"><div id="calBar" class="h-2 bg-orange-400 rounded-full" style="width:62%"></div></div>
+          </div>
+          <div class="rounded-2xl bg-blue-50 p-5">
+            <p class="text-sm text-slate-500">Protein</p>
+            <p class="text-2xl font-bold mt-1"><span id="protein">58</span> <span class="text-sm font-normal">/ 100 g</span></p>
+            <div class="h-2 bg-blue-100 rounded-full mt-3"><div id="proteinBar" class="h-2 bg-blue-500 rounded-full" style="width:58%"></div></div>
+          </div>
+          <div class="rounded-2xl bg-emerald-50 p-5">
+            <p class="text-sm text-slate-500">Water</p>
+            <p class="text-2xl font-bold mt-1"><span id="water">5</span> <span class="text-sm font-normal">/ 8 glasses</span></p>
+            <div class="h-2 bg-emerald-100 rounded-full mt-3"><div id="waterBar" class="h-2 bg-emerald-500 rounded-full" style="width:62.5%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <aside id="goals" class="bg-sage-700 text-white rounded-3xl p-7 shadow-sm">
+        <p class="text-sage-100 text-sm font-semibold">DAILY GOALS</p>
+        <h2 class="text-2xl font-bold mt-1">Your targets</h2>
+        <ul class="mt-6 space-y-4 text-sm">
+          <li class="flex justify-between border-b border-white/15 pb-3"><span>Calories</span><strong>2,000 kcal</strong></li>
+          <li class="flex justify-between border-b border-white/15 pb-3"><span>Protein</span><strong>100 g</strong></li>
+          <li class="flex justify-between border-b border-white/15 pb-3"><span>Carbohydrates</span><strong>250 g</strong></li>
+          <li class="flex justify-between border-b border-white/15 pb-3"><span>Fat</span><strong>65 g</strong></li>
+          <li class="flex justify-between"><span>Water</span><strong>8 glasses</strong></li>
+        </ul>
+        <button onclick="addWater()" class="w-full mt-7 bg-white text-sage-700 font-semibold py-3 rounded-xl hover:bg-sage-50 transition">
+          + Add a glass of water
+        </button>
+      </aside>
+    </section>
+
+    <section id="log" class="grid lg:grid-cols-5 gap-6">
+      <div class="lg:col-span-3 bg-white rounded-3xl p-7 shadow-sm border border-slate-100">
+        <div class="flex items-center justify-between gap-4 mb-5">
+          <div>
+            <h2 class="text-2xl font-bold">Food log</h2>
+            <p class="text-sm text-slate-500">Add meals to update your nutrition totals.</p>
+          </div>
+          <span id="mealCount" class="text-sm bg-sage-100 text-sage-700 px-3 py-1 rounded-full">3 meals</span>
+        </div>
+
+        <div id="mealList" class="space-y-3">
+          <article class="meal flex items-center justify-between gap-4 p-4 rounded-2xl bg-slate-50">
+            <div><p class="font-semibold">Breakfast</p><p class="text-sm text-slate-500">Oatmeal with banana</p></div>
+            <div class="text-right"><p class="font-semibold">320 kcal</p><p class="text-xs text-slate-500">12g protein</p></div>
+          </article>
+          <article class="meal flex items-center justify-between gap-4 p-4 rounded-2xl bg-slate-50">
+            <div><p class="font-semibold">Lunch</p><p class="text-sm text-slate-500">Rice, dal & vegetables</p></div>
+            <div class="text-right"><p class="font-semibold">510 kcal</p><p class="text-xs text-slate-500">20g protein</p></div>
+          </article>
+          <article class="meal flex items-center justify-between gap-4 p-4 rounded-2xl bg-slate-50">
+            <div><p class="font-semibold">Snack</p><p class="text-sm text-slate-500">Greek yogurt & fruit</p></div>
+            <div class="text-right"><p class="font-semibold">410 kcal</p><p class="text-xs text-slate-500">26g protein</p></div>
+          </article>
+        </div>
+
+        <form id="mealForm" class="mt-5 grid sm:grid-cols-4 gap-3">
+          <input id="mealName" required placeholder="Meal name" class="sm:col-span-2 border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-sage-500">
+          <input id="mealCalories" required type="number" min="1" placeholder="Calories" class="border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-sage-500">
+          <input id="mealProtein" required type="number" min="0" placeholder="Protein (g)" class="border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-sage-500">
+          <button class="sm:col-span-4 bg-sage-600 text-white font-semibold py-3 rounded-xl hover:bg-sage-700 transition">Add meal</button>
+        </form>
+      </div>
+
+      <div id="insights" class="lg:col-span-2 bg-white rounded-3xl p-7 shadow-sm border border-slate-100">
+        <p class="text-sage-600 text-sm font-semibold">SMART INSIGHTS</p>
+        <h2 class="text-2xl font-bold mt-1">Today's focus</h2>
+        <div class="mt-6 space-y-4">
+          <div class="p-4 rounded-2xl bg-amber-50"><strong>Hydration</strong><p class="text-sm text-slate-600 mt-1">You're 3 glasses away from your water goal.</p></div>
+          <div class="p-4 rounded-2xl bg-blue-50"><strong>Protein</strong><p class="text-sm text-slate-600 mt-1">Add a protein-rich dinner to reach your target.</p></div>
+          <div class="p-4 rounded-2xl bg-sage-50"><strong>Balance</strong><p class="text-sm text-slate-600 mt-1">Your calorie intake is currently within today's target range.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-slate-900 text-slate-300 mt-8">
+    <div class="max-w-6xl mx-auto px-5 py-6 flex flex-col sm:flex-row justify-between gap-2 text-sm">
+      <p>© 2026 NutriTrack — AI-Powered Nutrition Tracker</p>
+      <p>Responsive HTML5 + Tailwind CSS</p>
+    </div>
+  </footer>
+
+  <script>
+    let calories = 1240, protein = 58, water = 5, meals = 3;
+
+    function updateDashboard() {
+      document.getElementById('calories').textContent = calories;
+      document.getElementById('protein').textContent = protein;
+      document.getElementById('water').textContent = water;
+      document.getElementById('calBar').style.width = Math.min(calories / 20, 100) + '%';
+      document.getElementById('proteinBar').style.width = Math.min(protein, 100) + '%';
+      document.getElementById('waterBar').style.width = Math.min(water / 8 * 100, 100) + '%';
+      document.getElementById('mealCount').textContent = meals + (meals === 1 ? ' meal' : ' meals');
+      const score = Math.round((Math.min(calories/2000,1) * 35) + (Math.min(protein/100,1) * 35) + (Math.min(water/8,1) * 30));
+      document.getElementById('score').textContent = score;
+    }
+
+    function addWater() {
+      if (water < 8) water++;
+      updateDashboard();
+    }
+
+    document.getElementById('mealForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('mealName').value.trim();
+      const kcal = Number(document.getElementById('mealCalories').value);
+      const prot = Number(document.getElementById('mealProtein').value);
+      const item = document.createElement('article');
+      item.className = 'meal flex items-center justify-between gap-4 p-4 rounded-2xl bg-slate-50';
+      item.innerHTML = `<div><p class="font-semibold">${escapeHtml(name)}</p><p class="text-sm text-slate-500">Added just now</p></div>
+                        <div class="text-right"><p class="font-semibold">${kcal} kcal</p><p class="text-xs text-slate-500">${prot}g protein</p></div>`;
+      document.getElementById('mealList').appendChild(item);
+      calories += kcal; protein += prot; meals++;
+      this.reset();
+      updateDashboard();
+    });
+
+    function escapeHtml(value) {
+      return value.replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]));
+    }
+  </script>
+</body>
+</html>
